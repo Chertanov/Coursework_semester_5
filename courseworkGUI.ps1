@@ -1,7 +1,7 @@
 ﻿Add-Type -assembly System.Windows.Forms
 
-$name = "C:\users"
-$starter = get-childitem -Path $name
+$namef = "C:\users"
+$starter = get-childitem -Path $namef
 
 
 function Get-FileorDirectorySize($item){
@@ -55,17 +55,14 @@ return $array
 
 
 function Get-UsersSize{
-
 $progressbar.Maximum = $starter.Count;
 $progressbar.Step = 1;
 $progressbar.Value = 0;
-
-
 $textBoxDisplay.Text = ""
 foreach ($directory in $starter){
 $outuser = ("--"+$directory.name+" user files--").ToUpper()
 $name = $directory.name
-$path = ($first+"\${name}")
+$path = ($namef+"\${name}")
 $path = [string]$path 
 $textBoxDisplay.Text = $textBoxDisplay.Text + ("--"+$outuser+" user files--"+ [Environment]::NewLine)
 $sum = 0
@@ -73,34 +70,27 @@ Get-ChildItem -Path $path -Depth 20 -File  -ErrorAction SilentlyContinue -Force|
 $size = Get-FileorDirectorySize($sum)
 $textBoxDisplay.Text = $textBoxDisplay.Text + ($size.ToString()+ [Environment]::NewLine)
 $progressbar.PerformStep();
-}
-
-}
+}}
 
 
 function Get-CountUsersExtensions{
 $progressbar.Maximum = $starter.Count;
 $progressbar.Step = 1;
 $progressbar.Value = 0;
-
 $textBoxDisplay.Text = ""
 foreach ($directory in $starter){
 $outuser = ("--"+$directory.name+" user files--").ToUpper()
 $name = $directory.name
-$path = ($first+"\${name}")
+$path = ($namef+"\${name}")
 $path = [string]$path 
 $textBoxDisplay.Text = $textBoxDisplay.Text + ("--"+$outuser+" user files--"+ [Environment]::NewLine)
-
 $filetypes=@{}
 $items = Get-ChildItem -Path $path -Depth 20 -ErrorAction SilentlyContinue -Force
 $out = Count-FileExtensions($items)
 $output = $out.GetEnumerator()|Sort-Object -property Value -Descending|Select Value,Name|Out-String
-
 $textBoxDisplay.Text = $textBoxDisplay.Text + ($output+ [Environment]::NewLine)
-
 $progressbar.PerformStep();
-}
-}
+}}
 
 
 function Get-UsersFiles{
@@ -111,19 +101,18 @@ $progressbar.Value = 0;
 foreach ($directory in $starter){
 $outuser = ("--"+$directory.name+" user files--").ToUpper()
 $name = $directory.name
-$path = ($first+"\${name}")
+$path = ($namef+"\${name}")
 $path = [string]$path 
+
 $textBoxDisplay.Text = $textBoxDisplay.Text + ("--"+$outuser+" user files--"+ [Environment]::NewLine)
 $insideDir = ""
-$output = Get-ChildItem -Path $path -ErrorAction SilentlyContinue -Force|Select Name|Out-String 
-$textBoxDisplay.Text = $textBoxDisplay.Text + ("ok"+ [Environment]::NewLine)
+$output = Get-ChildItem -Path $path -ErrorAction SilentlyContinue -Force|Select Name|Out-String
 $textBoxDisplay.Text = $textBoxDisplay.Text + ($output+ [Environment]::NewLine)
 $progressbar.PerformStep();
-}
-}
+}}
 
 
-function Get-FolderSize{
+function Get-FoldersSize{
 $textBoxDisplay.Text = ""
 $progressbar.Maximum = $starter.Count;
 $progressbar.Step = 1;
@@ -134,14 +123,14 @@ $counter -= 1
 if ($counter -gt 0){
 $outuser = ("--"+$directory.name+" user files--").ToUpper()
 $name = $directory.name
-$path = ($first+"\${name}")
+$path = ($namef+"\${name}")
 $path = [string]$path 
 $textBoxDisplay.Text = $textBoxDisplay.Text + ("--"+$outuser+" user files--"+ [Environment]::NewLine)
-
 
 $names = Get-ChildItem -Path $path -ErrorAction SilentlyContinue -Force
 $output = Get-DirectoryContent($names)|Format-List Name,FileDirectoryExtension, FileDirectorySize |Out-String
 $textBoxDisplay.Text = $textBoxDisplay.Text + ($output+ [Environment]::NewLine)
+
 $progressbar.PerformStep();
 }}}
 
@@ -182,7 +171,7 @@ $GetFolderSize_button = New-object System.windows.forms.button
 $GetFolderSize_button.text = "Get userfolders size"
 $GetFolderSize_button.location = '40,200'
 $GetFolderSize_button.size = '200,40'
-$GetFolderSize_button.Add_Click({Get-FolderSize})
+$GetFolderSize_button.Add_Click({Get-FoldersSize})
 
 $Label = New-Object System.Windows.Forms.Label
 $Label.Location = "60, 20"
